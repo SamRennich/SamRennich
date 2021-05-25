@@ -38,18 +38,20 @@ int main() {
 // Removes all non-primes leaving only primes as true in the vector
 void primeSeive(std::vector<bool>& primes) {
 	
+	unsigned long long int size = primes.size(); // Finds size of primes vector
+	
 	// Sets scale to the square root of the RANGE for finding prime divisors
-	unsigned long long int scale = static_cast<int>(sqrt(RANGE));
+	unsigned long long int scale = static_cast<int>(sqrt(size - 1));
 	
 	// Turns all even numbers (bar 2) to false
-	for (unsigned long long int i = 4; i <= RANGE; i += 2) {
+	for (unsigned long long int i = 4; i < size; i += 2) {
 		primes[i] = false;
 	}
 	
 	// Iterates through every other value in the vector
 	for (unsigned long long int i = 3; i <= scale; i += 2) {
 		if (primes[i]) { // If the value is prime...
-			for (unsigned long long int j = (i * 2); j <= RANGE; j += i) { // Set all multiples of it to be false
+			for (unsigned long long int j = (i * 2); j < size; j += i) { // Set all multiples of it to be false
 				primes[j] = false;
 			}
 		}
@@ -61,7 +63,9 @@ void primeSeive(std::vector<bool>& primes) {
 // Prints all values that are prime
 void printPrimes(std::vector<bool> primes) {
 	
-	for (unsigned long long int i = 0; i <= RANGE; i++) { // Iterates through every value in the vector
+	unsigned long long int size = primes.size(); // Finds size of primes vector
+	
+	for (unsigned long long int i = 0; i < size; i++) { // Iterates through every value in the vector
 		if (primes[i]) { // If it is prime...
 			std::cout << i << std::endl; // Print it
 		}
@@ -74,8 +78,9 @@ void printPrimes(std::vector<bool> primes) {
 int numOfPrimes(std::vector<bool> primes) {
 	
 	unsigned long long int counter = 0; // Counts the number of primes
+	unsigned long long int size = primes.size(); // Finds size of primes vector
 	
-	for (unsigned long long int i = 0; i < primes.size(); i++) { // Iterates through every value in the vector
+	for (unsigned long long int i = 0; i < size; i++) { // Iterates through every value in the vector
 		if (primes[i]) { // If it is prime...
 			counter++; // Add to the counter
 		}
