@@ -1,4 +1,4 @@
-// Prime Seive
+// Prime Sieve
 
 #include <iostream>
 #include <vector>
@@ -20,7 +20,7 @@ int main() {
 	primes[1] = false; // Manual override for value 1
 	
 	// Sort, leaving only primes true
-	primeSeive(primes);
+	primeSieve(primes);
 	
 	// Prints all primes in the given RANGE
 	//printPrimes(primes);
@@ -36,7 +36,7 @@ int main() {
 
 
 // Removes all non-primes leaving only primes as true in the vector
-void primeSeive(std::vector<bool>& primes) {
+void primeSieve(std::vector<bool>& primes) {
 	
 	unsigned long long int size = primes.size(); // Finds size of primes vector
 	
