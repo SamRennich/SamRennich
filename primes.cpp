@@ -8,7 +8,7 @@
 const unsigned long long int RANGE = 1000000; // Sets the upper limit of where to find primes
 
 // Prototypes
-void primeSeive(std::vector<bool>&); // Sets all non-prime values to false
+void primeSieve(std::vector<bool>&); // Sets all non-prime values to false
 void printPrimes(std::vector<bool>); // Prints all values that are prime given prime vector
 int numOfPrimes(std::vector<bool>); // Finds the number of primes in the vector
 
