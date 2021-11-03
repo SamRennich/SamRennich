@@ -3,9 +3,9 @@
 # Check every repository for status
 
 # Text Colors
-RED='\033[0;31m' # Red
-GREEN='\033[0;32m' # Green
-NC='\033[0m' # No Color
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+NC=$(tput sgr0)
 
 # For every dir...
 for d in */; do
@@ -13,9 +13,9 @@ for d in */; do
 
   # If there are changes...
   if [ -n "$(git status --porcelain)" ]; then
-    echo -e "$d ${RED}Changes${NC}"
+    printf "%-20s %s\n" $d "${RED}Changes${NC}"
   else # If there are no changes...
-    echo -e "$d ${GREEN}No Changes${NC}"
+    printf "%-20s %s\n" $d "${GREEN}No Changes${NC}"
   fi
 
   cd .. # Move back
