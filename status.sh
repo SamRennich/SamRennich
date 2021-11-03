@@ -11,9 +11,11 @@ NC=$(tput sgr0)
 for d in */; do
   cd $d # Move to dir
 
-  # If there are changes...
-  if [ -n "$(git status --porcelain)" ]; then
-    printf "%-20s %s\n" $d "${RED}Changes${NC}"
+  # Checking scheme
+  if [ -n "$(git status --porcelain)" ]; then # If there are untracked changes...
+    printf "%-20s %s\n" $d "${RED}Untracked Changes${NC}"
+  elif ! git diff-index --quiet HEAD; then # If there are unstaged changes...
+    printf "%-20s %s\n" $d "${RED}Unstaged Changes${NC}"
   else # If there are no changes...
     printf "%-20s %s\n" $d "${GREEN}No Changes${NC}"
   fi
