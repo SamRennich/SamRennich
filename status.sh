@@ -50,7 +50,7 @@ for d in */; do
   if [ "${FLAG}" = true ]; then
     printf "%s %s\n" $STATUS "${GREEN}${d}${NC}"
   else
-    printf "%s %s\n" $STATUS "${RED}${d}*${NC}"
+    printf "%s %s\n" $STATUS "${RED}${d}${NC}"
   fi
 
   cd .. # Move back
