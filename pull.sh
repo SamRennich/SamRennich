@@ -3,9 +3,10 @@
 # Pull from origin for every repository
 
 # Text Colors
+NORMAL=$(tput sgr0)
 RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
-NC=$(tput sgr0)
+CYAN=$(tput setaf 6)
 
 # For every dir...
 for d in */; do

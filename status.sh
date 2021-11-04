@@ -4,53 +4,31 @@
 
 # Key
 # P = Unpushed Changes
-# C = Uncommitted Changes
-# S = Unstaged Changes
+# M = Uncommitted or Unstaged Changes
 
 # Text Colors
-NC=$(tput sgr0)
+NORMAL=$(tput sgr0)
 RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
+CYAN=$(tput setaf 6)
 
 # For every dir...
 for d in */; do
   cd $d # Move to dir
 
-  # Status Conditions
-  STATUS=""
+  # Check for unpushed, uncommitted, or unstaged changes
+  if [ -n "$(git cherry)" ] || [ -n "$(git status --porcelain)" ]; then
 
-  # Unchanged flag
-  FLAG=true
+    # If there are unpushed changes...
+    if [ -n "$(git cherry)" ]; then printf "${CYAN}P${NORMAL}"; else printf " "; fi
 
-  # If there are unpushed changes...
-  if [ -n "$(git cherry)" ]; then
-    STATUS+="P"
-    FLAG=false
-  else
-    STATUS+="."
-  fi
+    # If there are uncommitted or unstaged changes...
+    if [ -n "$(git status --porcelain)" ]; then printf "${RED}M${NORMAL}"; else printf " "; fi
 
-  # If there are uncommitted changes...
-  if [ -n "$(git diff --cached)" ]; then
-    STATUS+="C"
-    FLAG=false
-  else
-    STATUS+="."
-  fi
-
-  # If there are unstaged changes...
-  if [ -n "$(git status --porcelain)" ]; then
-    STATUS+="S"
-    FLAG=false
-  else
-    STATUS+="."
-  fi
-
-  # If there are no changes...
-  if [ "${FLAG}" = true ]; then
-    printf "%s %s\n" $STATUS "${GREEN}${d}${NC}"
-  else
-    printf "%s %s\n" $STATUS "${RED}${d}${NC}"
+    # Print dir name and git status -s
+    printf " %-20s|\n" $d
+    printf "%s\n" "------------------------"
+    git status -s
   fi
 
   cd .. # Move back
