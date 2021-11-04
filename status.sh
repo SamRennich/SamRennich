@@ -9,27 +9,20 @@
 # Text Colors
 NORMAL=$(tput sgr0)
 RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
 CYAN=$(tput setaf 6)
 
 # For every dir...
 for d in */; do
   cd $d # Move to dir
 
-  # Check for unpushed, uncommitted, or unstaged changes
-  if [ -n "$(git cherry)" ] || [ -n "$(git status --porcelain)" ]; then
+  # If there are unpushed changes...
+  if [ -n "$(git cherry)" ]; then STATUS+="${CYAN}P${NORMAL}"; fi
 
-    # If there are unpushed changes...
-    if [ -n "$(git cherry)" ]; then printf "${CYAN}P${NORMAL}"; else printf " "; fi
+  # If there are uncommitted or unstaged changes...
+  if [ -n "$(git status --porcelain)" ]; then STATUS+="${RED}M${NORMAL}"; fi
 
-    # If there are uncommitted or unstaged changes...
-    if [ -n "$(git status --porcelain)" ]; then printf "${RED}M${NORMAL}"; else printf " "; fi
-
-    # Print dir name and git status -s
-    printf " %-20s|\n" $d
-    printf "%s\n" "------------------------"
-    git status -s
-  fi
+  # Print dir name and git status -s
+  if [ -n "${STATUS}" ]; then printf "%-2s %s\n" "${STATUS}" "${d}"; fi
 
   cd .. # Move back
 done
