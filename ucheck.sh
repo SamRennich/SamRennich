@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Pull from origin for every repository
+# Check for updates from origin for every repository
 
 # Key
 # U = Updates are Available
