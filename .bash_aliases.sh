@@ -13,9 +13,9 @@ WHITE=$(tput setaf 7)
 
 # Startup checks (stands for update/upgrade)
 function uu() {
-	sudo apt get update
-	sudo apt get upgrade
-end
+	sudo apt update
+	sudo apt upgrade
+}
 
 # Check every repository for status
 function status() {
