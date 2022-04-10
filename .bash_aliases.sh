@@ -11,8 +11,8 @@ MAGENTA=$(tput setaf 5)
 CYAN=$(tput setaf 6)
 WHITE=$(tput setaf 7)
 
-# Startup checks
-function start() {
+# Startup checks (stands for update/upgrade)
+function uu() {
 	sudo apt get update
 	sudo apt get upgrade
 end
