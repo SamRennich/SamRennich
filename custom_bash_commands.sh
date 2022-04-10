@@ -47,7 +47,7 @@ function status() {
 }
 
 # Check for updates from origin for every repository
-function ucheck() {
+function update() {
 
   # Key
   # U = Updates are Available
@@ -68,17 +68,17 @@ function close() {
 
   # Store output from check functions
   STATUS="$(status)"
-  UCHECK="$(ucheck)"
+  UPDATE="$(update)"
 
   # Checking scheme
   if [ -n "${STATUS}" ]; then # If status returns something...
     printf "${STATUS}"
-    if [ -n "${UCHECK}" ]; then # If ucheck returns something...
+    if [ -n "${UPDATE}" ]; then # If UPDATE returns something...
 	printf "\n"
-      printf "${UCHECK}"
+      printf "${UPDATE}"
     fi
-  elif [ -n "${UCHECK}" ]; then # If ucheck returns something...
-    printf "${UCHECK}"
+  elif [ -n "${UPDATE}" ]; then # If UPDATE returns something...
+    printf "${UPDATE}"
   else # Exit shell
     exit
   fi
