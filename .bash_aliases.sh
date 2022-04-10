@@ -15,6 +15,8 @@ WHITE=$(tput setaf 7)
 function uu() {
 	sudo apt update
 	sudo apt upgrade
+	sudo gem update
+	sudo bundle update
 }
 
 # Check every repository for status
