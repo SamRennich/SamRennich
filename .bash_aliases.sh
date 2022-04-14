@@ -71,7 +71,7 @@ function update() {
 }
 
 # Check for status and updates and if there are none, exit
-function close() {
+function check() {
 
   # Store output from check functions
   STATUS="$(status)"
