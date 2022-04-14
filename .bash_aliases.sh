@@ -87,7 +87,7 @@ function close() {
   elif [ -n "${UPDATE}" ]; then # If UPDATE returns something...
     printf "${UPDATE}"
   else # Exit shell
-    exit
+    printf "OK"
   fi
 
   printf "\n"
