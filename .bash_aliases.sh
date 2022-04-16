@@ -11,6 +11,9 @@ MAGENTA=$(tput setaf 5)
 CYAN=$(tput setaf 6)
 WHITE=$(tput setaf 7)
 
+# All good phrase
+readonly ALL_GOOD="OK"
+
 function uu {
     sudo apt update
     sudo apt upgrade
@@ -25,6 +28,8 @@ function status() {
     # C = Uncommitted Changes
     # S = Unstaged Changes
     # T = Untracked Changes
+
+    OVERALL_STATUS=""
 
     # For every dir...
     for d in */; do
@@ -55,11 +60,17 @@ function status() {
 
         # Print dir name and git status -s
         if [ -n "${STATUS}" ]; then
-            printf "%-3s %s\n" $STATUS $d
+            OVERALL_STATUS+="%-3s %s\n" $STATUS $d
         fi
 
         cd .. # Move back
     done
+
+    if [ -n "${OVERALL_STATUS}" ]; then
+        printf "%s" ${OVERALL_STATUS}
+    else # All good
+        printf "%s\n" $ALL_GOOD
+    fi
 }
 
 # Check for updates from origin for every repository
@@ -75,6 +86,8 @@ function update() {
         # If out of date...
         if [ -n "$(git remote show origin | grep 'local out of date')" ]; then
             printf "%s %s\n" "${RED}U${NORMAL}" $d;
+        else # All good
+            printf $ALL_GOOD
         fi
 
         cd .. # Move back
@@ -89,16 +102,16 @@ function check() {
     UPDATE="$(update)"
 
     # Checking scheme
-    if [ -n "${STATUS}" ]; then # If status returns something...
+    if [ "${STATUS}" != $ALL_GOOD ]; then # If status returns something...
         printf "${STATUS}"
-        if [ -n "${UPDATE}" ]; then # If UPDATE returns something...
+        if [ "${UPDATE}" != $ALL_GOOD ]; then # If UPDATE returns something...
             printf "\n"
             printf "${UPDATE}"
         fi
-    elif [ -n "${UPDATE}" ]; then # If UPDATE returns something...
+    elif [ "${UPDATE}" != $ALL_GOOD ]; then # If UPDATE returns something...
         printf "${UPDATE}"
     else # Exit shell
-        printf "OK"
+        printf $ALL_GOOD
     fi
 
     printf "\n"
