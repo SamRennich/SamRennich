@@ -1,118 +1,90 @@
-#!/bin/bash
+#!/bin/sh
+#
+# Utility functions package updates and git checks
 
 # Text Colors
-NORMAL=$(tput sgr0)
-BLACK=$(tput setaf 0)
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-YELLOW=$(tput setaf 3)
-BLUE=$(tput setaf 4)
-MAGENTA=$(tput setaf 5)
-CYAN=$(tput setaf 6)
-WHITE=$(tput setaf 7)
+readonly NO_COLOR=$(tput sgr0)
+readonly BLACK=$(tput setaf 0)
+readonly RED=$(tput setaf 1)
+readonly GREEN=$(tput setaf 2)
+readonly YELLOW=$(tput setaf 3)
+readonly BLUE=$(tput setaf 4)
+readonly MAGENTA=$(tput setaf 5)
+readonly CYAN=$(tput setaf 6)
+readonly WHITE=$(tput setaf 7)
 
 # All good phrase
 readonly ALL_GOOD="OK"
 
-function uu {
+# Update, upgrade, and autoremove (uua = update, upgrade, autoremove)
+uua() {
     sudo apt update
     sudo apt upgrade
     sudo apt autoremove
 }
 
-# Check every repository for status
-function status() {
+# Check every repository for its status (rc = repo check)
+rc() {
 
     # Key
+    # U = Unupdated
     # P = Unpushed Changes
     # C = Uncommitted Changes
     # S = Unstaged Changes
     # T = Untracked Changes
 
-    OVERALL_STATUS=""
+    local OVERALL_STATUS=""
 
-    # For every dir...
     for d in */; do
-        cd $d # Move to dir
+        cd $d
 
-        # Store status flags
-        STATUS=""
+        local STATUS=""
 
-        # If there are unpushed changes...
-        if [ -n "$( git status | fgrep 'push' )" ]; then
-            STATUS+="${CYAN}P${NORMAL}"
+        # Unupdated
+        if [ "$( git remote show origin | grep 'local out of date' )" ]; then
+            STATUS="${STATUS}${BLUE}U${NO_COLOR}"
+        else
+            STATUS="${STATUS} "
         fi
 
-        # If there are uncommitted changes...
-        if [ -n "$( git status | fgrep 'to be committed' )" ]; then
-            STATUS+="${YELLOW}C${NORMAL}"
+        # Unpushed
+        if [ "$( git status | fgrep 'push' )" ]; then
+            STATUS="${STATUS}${CYAN}P${NO_COLOR}"
+        else
+            STATUS="${STATUS} "
         fi
 
-        # If there are unstaged changes...
-        if [ -n "$( git status | fgrep 'not staged' )" ]; then
-            STATUS+="${RED}S${NORMAL}"
+        # Uncommitted
+        if [ "$( git status | fgrep 'to be committed' )" ] ; then
+            STATUS="${STATUS}${YELLOW}C${NO_COLOR}"
+        else
+            STATUS="${STATUS} "
         fi
 
-        # If there are untracked changes...
-        if [ -n "$( git status | fgrep 'Untracked' )" ]; then
-            STATUS+="${MAGENTA}T${NORMAL}"
+        # Unstaged
+        if [ "$( git status | fgrep 'not staged' )" ]; then
+            STATUS="${STATUS}${RED}S${NO_COLOR}"
+        else
+            STATUS="${STATUS} "
         fi
 
-        # Print dir name and git status -s
-        if [ -n "${STATUS}" ]; then
-            OVERALL_STATUS+="%-3s %s\n" $STATUS $d
+        # Untracked
+        if [ "$( git status | fgrep 'Untracked' )" ]; then
+            STATUS="${STATUS}${MAGENTA}T${NO_COLOR}"
+        else
+            STATUS="${STATUS} "
         fi
 
-        cd .. # Move back
+        if [ "${STATUS}" != "     " ]; then
+            OVERALL_STATUS="${OVERALL_STATUS}${STATUS} ${d%?}"
+        fi
+
+        cd ..
     done
 
-    if [ -n "${OVERALL_STATUS}" ]; then
-        printf "%s" ${OVERALL_STATUS}
-    else # All good
-        printf "%s\n" $ALL_GOOD
+    if [ "${OVERALL_STATUS}" ]; then
+        echo "${OVERALL_STATUS}"
+    else
+        echo "${ALL_GOOD}"
     fi
-}
-
-# Check for updates from origin for every repository
-function update() {
-
-    # Key
-    # U = Updates are Available
-
-    # For every dir...
-    for d in */; do
-        cd $d # Move to dir
-
-        # If out of date...
-        if [ -n "$(git remote show origin | grep 'local out of date')" ]; then
-            printf "%s %s\n" "${RED}U${NORMAL}" $d;
-        else # All good
-            printf $ALL_GOOD
-        fi
-
-        cd .. # Move back
-    done
-}
-
-# Check for status and updates and if there are none, exit
-function check() {
-
-    # Store output from check functions
-    STATUS="$(status)"
-    UPDATE="$(update)"
-
-    # Checking scheme
-    if [ "${STATUS}" != $ALL_GOOD ]; then # If status returns something...
-        printf "${STATUS}"
-        if [ "${UPDATE}" != $ALL_GOOD ]; then # If UPDATE returns something...
-            printf "\n"
-            printf "${UPDATE}"
-        fi
-    elif [ "${UPDATE}" != $ALL_GOOD ]; then # If UPDATE returns something...
-        printf "${UPDATE}"
-    else # Exit shell
-        printf $ALL_GOOD
-    fi
-
-    printf "\n"
 }
