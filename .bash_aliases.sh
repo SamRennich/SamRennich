@@ -33,6 +33,9 @@ rc() {
     # S = Unstaged Changes
     # T = Untracked Changes
 
+    local ORIGINAL_DIR="$( pwd )"
+    cd
+
     local OVERALL_STATUS=""
 
     for d in */; do
@@ -87,4 +90,6 @@ rc() {
     else
         echo "${ALL_GOOD}"
     fi
+
+    cd $ORIGINAL_DIR
 }
