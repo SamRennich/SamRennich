@@ -79,14 +79,14 @@ rc() {
         fi
 
         if [ "${STATUS}" != "     " ]; then
-            OVERALL_STATUS="${OVERALL_STATUS}${STATUS} ${d%?}"
+            OVERALL_STATUS="${OVERALL_STATUS}${STATUS} ${d%?}\n"
         fi
 
         cd ..
     done
 
     if [ "${OVERALL_STATUS}" ]; then
-        echo "${OVERALL_STATUS}"
+        echo -n -e "${OVERALL_STATUS}"
     else
         echo "${ALL_GOOD}"
     fi
