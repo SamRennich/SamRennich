@@ -41,45 +41,47 @@ rc() {
     for d in */; do
         cd $d
 
-        local STATUS=""
+        if [ -d "./.git" ]; then
+            local STATUS=""
 
-        # Unupdated
-        if [ "$( git remote show origin | grep 'local out of date' )" ]; then
-            STATUS="${STATUS}${BLUE}U${NO_COLOR}"
-        else
-            STATUS="${STATUS} "
-        fi
+            # Unupdated
+            if [ "$( git remote show origin | grep 'local out of date' )" ]; then
+                STATUS="${STATUS}${BLUE}U${NO_COLOR}"
+            else
+                STATUS="${STATUS} "
+            fi
 
-        # Unpushed
-        if [ "$( git status | fgrep 'push' )" ]; then
-            STATUS="${STATUS}${CYAN}P${NO_COLOR}"
-        else
-            STATUS="${STATUS} "
-        fi
+            # Unpushed
+            if [ "$( git status | fgrep 'push' )" ]; then
+                STATUS="${STATUS}${CYAN}P${NO_COLOR}"
+            else
+                STATUS="${STATUS} "
+            fi
 
-        # Uncommitted
-        if [ "$( git status | fgrep 'to be committed' )" ] ; then
-            STATUS="${STATUS}${YELLOW}C${NO_COLOR}"
-        else
-            STATUS="${STATUS} "
-        fi
+            # Uncommitted
+            if [ "$( git status | fgrep 'to be committed' )" ]; then
+                STATUS="${STATUS}${YELLOW}C${NO_COLOR}"
+            else
+                STATUS="${STATUS} "
+            fi
 
-        # Unstaged
-        if [ "$( git status | fgrep 'not staged' )" ]; then
-            STATUS="${STATUS}${RED}S${NO_COLOR}"
-        else
-            STATUS="${STATUS} "
-        fi
+            # Unstaged
+            if [ "$( git status | fgrep 'not staged' )" ]; then
+                STATUS="${STATUS}${RED}S${NO_COLOR}"
+            else
+                STATUS="${STATUS} "
+            fi
 
-        # Untracked
-        if [ "$( git status | fgrep 'Untracked' )" ]; then
-            STATUS="${STATUS}${MAGENTA}T${NO_COLOR}"
-        else
-            STATUS="${STATUS} "
-        fi
+            # Untracked
+            if [ "$( git status | fgrep 'Untracked' )" ]; then
+                STATUS="${STATUS}${MAGENTA}T${NO_COLOR}"
+            else
+                STATUS="${STATUS} "
+            fi
 
-        if [ "${STATUS}" != "     " ]; then
-            OVERALL_STATUS="${OVERALL_STATUS}${STATUS} ${d%?}\n"
+            if [ "${STATUS}" != "     " ]; then
+                OVERALL_STATUS="${OVERALL_STATUS}${STATUS} ${d%?}\n"
+            fi
         fi
 
         cd ..
