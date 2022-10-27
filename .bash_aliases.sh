@@ -13,9 +13,6 @@ readonly MAGENTA=$(tput setaf 5)
 readonly CYAN=$(tput setaf 6)
 readonly WHITE=$(tput setaf 7)
 
-# All good phrase
-readonly ALL_GOOD="OK"
-
 # Update, upgrade, and autoremove (uua = update, upgrade, autoremove)
 uua() {
     sudo apt update
@@ -89,8 +86,6 @@ rc() {
 
     if [ "${OVERALL_STATUS}" ]; then
         echo -n -e "${OVERALL_STATUS}"
-    else
-        echo "${ALL_GOOD}"
     fi
 
     cd $ORIGINAL_DIR
