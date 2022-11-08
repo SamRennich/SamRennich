@@ -18,6 +18,8 @@ uua() {
     sudo apt update
     sudo apt upgrade
     sudo apt autoremove
+    sudo pip install --upgrade pip
+    sudo pip-review --local --auto
 }
 
 # Check every repository for its status (rc = repo check)
