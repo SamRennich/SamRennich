@@ -19,7 +19,7 @@ uua() {
     sudo apt upgrade
     sudo apt autoremove
     pip install --upgrade pip
-    pip-review --local --auto
+    pip3 list -o | cut -f1 -d' ' | tr " " "\n" | awk '{if(NR>=3)print)' | cut -d' ' -f1 | xargs -n1 pip3 install -U
 }
 
 # Check every repository for its status (rc = repo check)
